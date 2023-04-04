@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebaseproject/model/user.dart';
+import 'package:firebaseproject/services/database.dart';
 
 class AuthSerrvices {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -28,7 +29,38 @@ class AuthSerrvices {
   }
   //sign in with email and password
 
+  Future SignInwithEmailPassword(
+      {required String email, required String password}) async {
+    try {
+      final result = await _auth.signInWithEmailAndPassword(
+          email: email, password: password);
+      final user = result.user;
+      return _userFromFirebaseUser(user);
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
+
   //register with email and password
+
+  Future RegisterwithEmailPassword(
+      {required String email, required String password}) async {
+    try {
+      final result = await _auth.createUserWithEmailAndPassword(
+          email: email, password: password);
+      final user = result.user;
+//create a new document with user
+
+      await DatabaseService(uid: user!.uid)
+          .UpdateUserData("0", "new crew member", 1);
+
+      return _userFromFirebaseUser(user);
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
 
   //sign out
   Future signout() async {
