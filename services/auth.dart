@@ -53,7 +53,7 @@ class AuthSerrvices {
 //create a new document with user
 
       await DatabaseService(uid: user!.uid)
-          .UpdateUserData("0", "new crew member", 1);
+          .UpdateUserData("0", "new crew member", 100);
 
       return _userFromFirebaseUser(user);
     } catch (e) {
